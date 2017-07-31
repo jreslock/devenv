@@ -1,0 +1,8 @@
+openstack_user_name = "username"
+openstack_password = "openstack password"
+openstack_auth_url = "auth url"
+openstack_domain_name = "domain name"
+openstack_project_id = "project or tenant id"
+openstack_net_name = "network name"
+openstack_image_id = "image id for an ubuntu 16.04 system"
+openstack_flavor_id = "some flavor id"
