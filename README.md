@@ -1,15 +1,28 @@
 # Development Environment Setup
 
-## Configures an Ubuntu 16.04 system as a development environment
+## Provisioner
 
-Run `ansible-playbook -i inventory devenv.yml` to configure the target host.
+### Provisions a VM in Openstack, hands off configuration to ansible
 
-Requirements: 
-    - ansible
-    - ssh key
-    - Ubuntu 16.04 system
+Requirements:
+
+- terraform
+- ansible
+- Ubuntu 16.04 image
+- ssh key pair
+
+
+        cd devenv/provisioner/openstack
     
-## Notes
+        terraform apply -var-file=your.tfvars
+
+The provisioner will run ansible as a last-step which should run the ansible code in the configurator directory.
+
+## Configurator
+
+### Configures an Ubuntu 16.04 system as a development environment
+    
+### Notes
 
 This development environment is primarily used for infrastructure automation and devops work.  I work with packer, ansible, python, docker, etc.  These tools are all pre-installed.  I also use zsh with antigen for shell customization.  
 

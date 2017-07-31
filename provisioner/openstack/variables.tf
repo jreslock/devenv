@@ -57,3 +57,28 @@ variable "openstack_flavor_id" {
   type = "string"
   default = ""
 }
+
+variable "fullname" {
+  type = "string"
+  default = ""
+}
+
+variable "gpg_key" {
+  type = "string"
+  default = ""
+}
+
+variable "email" {
+  type = "string"
+  default = ""
+}
+
+variable "ansible_playbook_dir" {
+  type = "string"
+  default = ""
+}
+
+variable "ansible_user" {
+  type = "string"
+  default = ""
+}

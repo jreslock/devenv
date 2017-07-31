@@ -41,6 +41,36 @@ resource "openstack_networking_floatingip_v2" "float" {
 }
 
 resource "openstack_compute_floatingip_associate_v2" "float_assoc" {
+  depends_on  = ["openstack_compute_instance_v2.instance","openstack_networking_floatingip_v2.float"]
   floating_ip = "${openstack_networking_floatingip_v2.float.address}"
   instance_id = "${openstack_compute_instance_v2.instance.id}"
+}
+
+data "template_file" "inventory" {
+  depends_on  = ["openstack_compute_instance_v2.instance","openstack_networking_floatingip_v2.float"]
+  template    = "${file("${path.module}/templates/inventory.tpl")}"
+
+  vars {
+    public_ip   = "${openstack_networking_floatingip_v2.float.address}"
+    name        = "${openstack_compute_instance_v2.instance.name}"
+    ansible_user= "${var.ansible_user}"
+    fullname    = "${var.fullname}"
+    gpg_key     = "${var.gpg_key}"
+    email       = "${var.email}"
+    private_key = "${var.private_key}"
+  }
+}
+
+resource "null_resource" "write_inventory" {
+  depends_on = ["data.template_file.inventory"]
+  provisioner "local-exec" {
+    command = "cat << 'EOF' > /tmp/devenv-inventory\n${data.template_file.inventory.rendered}\nEOF"
+  }
+}
+
+resource "null_resource" "ansible" {
+  depends_on = ["null_resource.write_inventory"]
+  provisioner "local-exec" {
+    command = "ansible-playbook -i /tmp/devenv-inventory ${var.ansible_playbook_dir}/devenv.yml"
+  }
 }
