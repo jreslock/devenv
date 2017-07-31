@@ -1,0 +1,9 @@
+- name: prepare Ubuntu 16.04 hosts with python 2
+  raw: >
+    if [ -f /etc/lsb-release ];
+    then sudo apt-get -y install python-simplejson; fi
+
+- include: repos.yml
+- include: utils.yml
+- include: docker.yml
+- include: nx.yml

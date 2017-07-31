@@ -1,0 +1,42 @@
+- name: Make filesystem
+  filesystem:
+    fstype: ext4
+    dev: /dev/vdb
+    resizefs: yes
+    force: yes
+
+- name: Mount new filesystem
+  mount:
+    path: /mnt
+    src:  /dev/vdb
+    fstype: ext4
+    state: mounted
+
+- name: Install utilities/tools
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - git
+    - gcc
+    - build-essential
+    - openssl
+    - libssl-dev
+    - libffi6
+    - openjdk-8-jdk
+    - python
+    - python-dev
+    - python-pip
+    - python-virtualenv
+    - pycharm
+    - ubuntu-desktop
+    - zsh-antigen
+
+- name: Install pip packages
+  become: True
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - virtualenvwrapper

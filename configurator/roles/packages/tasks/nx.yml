@@ -1,0 +1,15 @@
+- name: Install NX
+  apt:
+    deb: http://download.nomachine.com/download/5.3/Linux/nomachine_5.3.9_6_amd64.deb
+
+- name: Open udp 4011-4999
+  ufw:
+    rule: allow
+    port: '4011:4999'
+    proto: udp
+
+- name: Open tcp 4000
+  ufw:
+    rule: allow
+    port: 4000
+    proto: tcp

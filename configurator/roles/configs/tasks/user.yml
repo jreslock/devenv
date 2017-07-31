@@ -1,0 +1,46 @@
+- name: Set up user + group
+  user:
+    name: "{{ user }}"
+    shell: /bin/zsh
+    groups: sudo, docker
+    state: present
+
+- name: Drop authorized key for {{ user }}
+  authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  with_items:
+    - "/home/{{ user }}/Envs"
+    - "/home/{{ user }}/code"
+    - "/home/{{ user }}/tools"
+
+- name: Install Antigen
+  get_url:
+    url: https://git.io/antigen
+    dest: "/home/{{ user }}/antigen.zsh"
+
+- name: Set up NX key dir
+  file:
+    path: /home/{{ user }}/.nx/config
+    state: directory
+    recurse: yes
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
+- name: Copy NX key
+  copy:
+    src: ~/.ssh/id_rsa.pub
+    dest: /home/{{ user }}/.nx/config/authorized.crt
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0600

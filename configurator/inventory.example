@@ -1,0 +1,11 @@
+[all:vars]
+
+user = "{{ lookup('env', 'USER') }}"
+gpg_sign_key = Your gpg signing key
+email = Your Email
+full_name = Your Name
+ansible_user = ubuntu
+ansible_ssh_private_key_file = ~/.ssh/id_rsa
+
+[all]
+your_devenv_IP

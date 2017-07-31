@@ -1,0 +1,16 @@
+- name: apt keys
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  with_items:
+    - "http://archive.getdeb.net/getdeb-archive.key"
+    - "https://download.docker.com/linux/ubuntu/gpg"
+
+- name: Add repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
+    - deb http://archive.getdeb.net/ubuntu xenial-getdeb apps

@@ -1,0 +1,16 @@
+- name: Write templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/home/{{ user }}/{{ item }}"
+    owner: "{{ user }}"
+    mode: 0755
+  with_items:
+    - '.git-commit-template'
+    - '.gitconfig'
+    - '.zshrc'
+
+- name: Write sudoers file
+  template:
+    src: sudoers.j2
+    dest: "/etc/sudoers.d/{{ user }}"
+    mode: 0600
