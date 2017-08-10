@@ -1,5 +1,12 @@
 - hosts: all
-  gather_facts: yes
+  gather_facts: no
+  tasks:
+    - name: prepare Ubuntu 16.04 hosts with python 2
+      raw: >
+        if [ -f /etc/lsb-release ];
+        then sudo apt-get -y install python-simplejson; fi
+
+- hosts: all
   become: yes
   become_method: sudo
   any_errors_fatal: true

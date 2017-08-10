@@ -2,7 +2,7 @@
   user:
     name: "{{ user }}"
     shell: /bin/zsh
-    groups: sudo, docker
+    groups: sudo,docker
     state: present
 
 - name: Drop authorized key for {{ user }}

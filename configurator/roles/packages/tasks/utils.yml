@@ -7,7 +7,7 @@
 
 - name: Mount new filesystem
   mount:
-    path: /mnt
+    name: /mnt
     src:  /dev/vdb
     fstype: ext4
     state: mounted

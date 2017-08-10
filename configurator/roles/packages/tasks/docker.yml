@@ -8,6 +8,11 @@
     path: /mnt/docker
     state: directory
 
+- name: dump
+  debug:
+    var: hostvars[ansible_host]
+    verbosity: 4
+
 - name: Copy unit file
   template:
     src: docker.service.j2

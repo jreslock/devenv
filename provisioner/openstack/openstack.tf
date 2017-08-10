@@ -41,13 +41,16 @@ resource "openstack_networking_floatingip_v2" "float" {
 }
 
 resource "openstack_compute_floatingip_associate_v2" "float_assoc" {
-  depends_on  = ["openstack_compute_instance_v2.instance","openstack_networking_floatingip_v2.float"]
+  depends_on  = ["openstack_compute_instance_v2.instance",
+                 "openstack_networking_floatingip_v2.float",
+                 "openstack_compute_volume_attach_v2.attach"
+                ]
   floating_ip = "${openstack_networking_floatingip_v2.float.address}"
   instance_id = "${openstack_compute_instance_v2.instance.id}"
 }
 
 data "template_file" "inventory" {
-  depends_on  = ["openstack_compute_instance_v2.instance","openstack_networking_floatingip_v2.float"]
+  depends_on  = ["openstack_compute_floatingip_associate_v2.float_assoc"]
   template    = "${file("${path.module}/templates/inventory.tpl")}"
 
   vars {
@@ -61,8 +64,24 @@ data "template_file" "inventory" {
   }
 }
 
+resource "null_resource" "wait" {
+  depends_on = ["openstack_compute_floatingip_associate_v2.float_assoc"]
+  provisioner "remote-exec" {
+    inline = [
+      "echo $(hostname -I | cut -d ' ' -f 1) $(hostname) | sudo tee -a /etc/hosts"
+    ]
+    connection {
+      user = "${var.ansible_user}"
+      host = "${openstack_networking_floatingip_v2.float.address}"
+      private_key = "${file(var.private_key)}"
+      timeout = "1m"
+    }
+  }
+}
+
 resource "null_resource" "write_inventory" {
-  depends_on = ["data.template_file.inventory"]
+  depends_on = ["data.template_file.inventory",
+                "null_resource.wait"]
   provisioner "local-exec" {
     command = "cat << 'EOF' > /tmp/devenv-inventory\n${data.template_file.inventory.rendered}\nEOF"
   }
