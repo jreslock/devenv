@@ -14,3 +14,9 @@
     src: sudoers.j2
     dest: "/etc/sudoers.d/{{ user }}"
     mode: 0600
+
+- name: Disable lightdm
+  service:
+    name: lightdm
+    state: stopped
+    enabled: no

@@ -1,6 +1,6 @@
 - name: Install NX
   apt:
-    deb: http://download.nomachine.com/download/5.3/Linux/nomachine_5.3.9_6_amd64.deb
+    deb: http://download.nomachine.com/download/5.3/Linux/nomachine_5.3.10_6_amd64.deb
 
 - name: Open udp 4011-4999
   ufw:

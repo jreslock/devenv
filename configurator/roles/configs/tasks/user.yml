@@ -2,8 +2,21 @@
   user:
     name: "{{ user }}"
     shell: /bin/zsh
-    groups: sudo,docker
+    groups: "{{ item }}"
     state: present
+  with_items:
+    - sudo
+    - docker
+    - adm
+    - dialout
+    - cdrom
+    - floppy
+    - audio
+    - dip
+    - video
+    - plugdev
+    - netdev
+    - lxd
 
 - name: Drop authorized key for {{ user }}
   authorized_key:
