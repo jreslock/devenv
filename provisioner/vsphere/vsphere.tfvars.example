@@ -1,0 +1,8 @@
+vsphere_server = ""
+vsphere_datacenter = ""
+vsphere_template = ""
+vsphere_network = ""
+vcpu = ""
+memory = ""
+ansible_playbook_dir = ""
+ansible_user = ""
